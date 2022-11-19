@@ -103,34 +103,32 @@ void ConnectedCities::populateDirectedRoutes(map<string, CityNode> &cityGraph,
     }
 
 //    //for(auto test1: cityGraph) {
-//        for (auto test: cityGraph.at("LA").getDirectRoutedCities()){
-//            cout << "LA contains " << cityGraph.at(test).getCity() << endl;
+//        for (auto test: cityGraph.at("NH").getDirectRoutedCities()){
 //        }
 //   // }
 
 }
 
-void ConnectedCities::RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities){
+void ConnectedCities::RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> &cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities){
+
     vector<string> adjacentCities = cityGraph.at(startCity).getDirectRoutedCities();
 
-    if(visitedCities.count(startCity)){
-        cout << "ended via here" << endl;
-        cityGraph.at(startCity).setReachableCities(reachableCities);
-        for(auto endCity : cityGraph.at(startCity).getReachableCities()){
-            cout << startCity << " can reach " << endCity << endl;
-        }
+    if(visitedCities.count(startCity)){        // base case: stop if city has already been visited
+//        cout << "bc: 1" << endl;
         return;
     }
 
-    cout << startCity << endl;
-
     reachableCities.push_back(startCity);
     visitedCities.insert(startCity);
+    cityGraph.at(startCity).setReachableCities(reachableCities);
+
+    for (auto test: cityGraph.at("NH").getReachableCities()){
+        cout << "NH saved " << startCity << endl;
+    }
 
     for(auto adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {
             RecursiveDFS_ToFind_ReachableCities(cityGraph, adjacentCity, reachableCities, visitedCities);
     }
-
 //    for(auto directCity : cityGraph.at(startCity).getDirectRoutedCities()){
 //        for(auto reachableCity : cityGraph.at(startCity).getReachableCities()) {
 //            // if it's not already a reachable city, recurse
@@ -171,13 +169,26 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
     set<string> visitedCities;
     vector<string> reachableCities;
 
-//    for(auto currentCity : cities) {
-        RecursiveDFS_ToFind_ReachableCities(cityGraph,"NH", reachableCities, visitedCities);
-        for(auto endCity : cityGraph.at("NH").getReachableCities()){
-            cout << "NH can reach " << endCity << endl;
+    for(auto currentCity : cities) {
+        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity, reachableCities, visitedCities);
+        for(auto endCities : cityGraph.at(currentCity).getDirectRoutedCities()){
+            cout << currentCity << " can reach " << endCities << endl;
         }
+    }
 
+    for(auto currentCity : cities) {
+        for(auto endCities : cityGraph.at(currentCity).getDirectRoutedCities()){
+            cout << currentCity << " can reach " << endCities << endl;
+        }
+    }
+
+//    RecursiveDFS_ToFind_ReachableCities(cityGraph, "NH", reachableCities, visitedCities);
+//
+//    for (auto test: reachableCities){
+//        cout << "NH can reach " << test << endl;
 //    }
+
+
 
 
   // Hint for DFS:
