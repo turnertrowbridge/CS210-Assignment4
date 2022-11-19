@@ -1,4 +1,14 @@
+#include <iostream>
 #include "connectedcities.h"
+
+/**
+ * SINGLE EXAMINEE AFFIDAVIT
+*“I, the undersigned, promise that this exam submission is my own work. I recognize that should this not
+*be the case; I will be subject to plagiarism penalties as outlined in the course syllabus.”
+*Student Name: Turner Trowbridge
+*RED ID: 827959204
+Date: 11/17/2022
+*/
 
 /**
  * <p>
@@ -71,9 +81,56 @@
  
 * @see         
 */
+map<string, CityNode> ConnectedCities::createGraph(vector<string> cities) {
+    // create a map containing all cities added using city name as key
+    // and an instance of CityNode as value
+    map<string, CityNode> cityGraph;
+    for (auto city: cities){
+        cityGraph.insert({city, CityNode(city)});
+    }
+    return cityGraph;
+}
+
+void ConnectedCities::populateDirectedRoutes(map<string, CityNode> cityGraph,
+                                             vector<pair<string, string>> trainRoutes) {
+    // add the perpendicular cities to each city
+    for (auto city: trainRoutes){
+        if (cityGraph.count(city.first) == 1){
+            cityGraph.at(city.first).addADirectRoutedCity(city.second);
+        }
+    }
+
+//    for(auto test1: cityGraph) {
+//        for (auto test: cityGraph.at(test1.first).getDirectRoutedCities()){
+//            cout << cityGraph.at(test1.first).getCity() << " contains " << test << endl;
+//        }
+//    }
+
+}
+
+void ConnectedCities::RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> cityGraph, string startCity, string currentCity){
+
+    cityGraph.at(startCity).addReachableCity(currentCity); // make current city a reachable city for the startCity
+
+    cout << startCity << " can reach " << currentCity << endl;
+
+    for(auto directCity : cityGraph.at(startCity).getDirectRoutedCities()){
+        for(auto reachableCity : cityGraph.at(startCity).getReachableCities()) {
+            // if it's not already a reachable city, recurse
+            if (directCity != reachableCity) {
+                RecursiveDFS_ToFind_ReachableCities(cityGraph,startCity,currentCity);
+            }
+        }
+    }
+}
+
+
+
+
 vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(
                                     vector<string> cities, 
                                     vector<pair<string, string>> trainRoutes) {
+
 
   // Write your implementation here.
     
@@ -89,7 +146,14 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
   // the graph of city nodes, so that given a city code,
   // you can find the corresponding CityNode object instantaneously.
   // Think Which data structure would give you the best lookup ability
-  // by using a key. 
+  // by using a key.
+
+    map<string, CityNode> cityGraph = createGraph(cities);
+    populateDirectedRoutes(cityGraph, trainRoutes);
+    //for(auto currentCity : cities) {
+        RecursiveDFS_ToFind_ReachableCities(cityGraph, "LA", "LA");
+    //}
+
 
   // Hint for DFS:
   // You may want to use a separate function to implement the 

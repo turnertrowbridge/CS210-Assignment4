@@ -5,6 +5,7 @@
 #include <stdio.h> 
 #include <string>
 #include <vector>
+#include <map>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ using namespace std;
 // A city class to store a city vertice / node in the city graph
 // You must NOT change this class
 class CityNode {
-private:     
+private:
   string city;
   vector<string> directRoutedCities;
   vector<string> reachableCities;
@@ -46,11 +47,11 @@ public:
   inline void setReachableCities(vector<string> rCities) {
     reachableCities = rCities;
   }
+
 };
 
 
 class ConnectedCities {
-    
 public:
   
   /**
@@ -122,10 +123,18 @@ public:
   *               using ascending alphabetical order of the city code as the tiebreaker.
   * @see         
   */
+
+  static map<string, CityNode> createGraph(vector<string> cities);
+
+  static void populateDirectedRoutes(map<string, CityNode> cityGraph, vector<pair<string, string>> trainRoutes);
+
+  static void RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> cityGraph,string startCity, string currentCity);
+
   static vector<CityNode> citiesSortedByNumOf_Its_ReachableCities_byTrain(
                             vector<string> cities, 
                             vector<pair<string, string>> trainRoutes);
-  
 };
+
+
 
 #endif
