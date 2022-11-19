@@ -126,7 +126,7 @@ public:
 
   static map<string, CityNode> createGraph(vector<string> cities);
 
-  static void populateDirectedRoutes(map<string, CityNode> cityGraph, vector<pair<string, string>> trainRoutes);
+  static void populateDirectedRoutes(map<string, CityNode> &cityGraph, vector<pair<string, string>> trainRoutes);
 
   static void RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> cityGraph, string startCity, vector<string> reachableCities, set<string> &visitedCities);
 
