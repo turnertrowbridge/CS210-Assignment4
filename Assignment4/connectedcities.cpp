@@ -191,8 +191,13 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
 
     sort(cityRouteSize.begin(), cityRouteSize.end(), sortBy_SizeDesc_And_NameAsc);
 
-    for(auto city2 : cityRouteSize){
-        cout << city2.first << " has " << city2.second << " routes." << endl;
+
+
+    vector<CityNode> cityNodesSorted;
+    for(auto cities : cityGraph){
+        for(auto city2 : cityRouteSize){
+            cityNodesSorted.push_back(cityGraph.at(city2.first));
+        }
     }
 
 
@@ -222,7 +227,7 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
   // then sort by number of reachable cities in descending order.   
 
   cout << "the end" << endl;
-  return vector<CityNode>(); // vector<CityNode>() here is a placeholder, you need to change it to
+  return cityNodesSorted; // vector<CityNode>() here is a placeholder, you need to change it to
                              // whichever the vector your logic comes up with and return
 }
 
