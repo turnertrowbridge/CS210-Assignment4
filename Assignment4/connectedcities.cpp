@@ -109,38 +109,33 @@ void ConnectedCities::populateDirectedRoutes(map<string, CityNode> &cityGraph,
 
 }
 
-void ConnectedCities::RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> &cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities){
 
-    vector<string> adjacentCities = cityGraph.at(startCity).getDirectRoutedCities();
+void ConnectedCities::RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> &cityGraph, string startCity){
+    set<string> visitedCities;
+    vector<string> reachableCities;
+    RecursiveDFS(cityGraph, startCity, reachableCities, visitedCities);
+    cityGraph.at(startCity).setReachableCities(reachableCities);
+}
+
+void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities){
+
+//    cout << endl << endl;
+//    cout << startCity << endl;
 
     if(visitedCities.count(startCity)){        // base case: stop if city has already been visited
-//        cout << "bc: 1" << endl;
         return;
     }
 
+    // store the city as reachable and visited
     reachableCities.push_back(startCity);
+//    cout << "a city travels to " << startCity << endl;
     visitedCities.insert(startCity);
-    cityGraph.at(startCity).setReachableCities(reachableCities);
 
-    for (auto test: cityGraph.at("NH").getReachableCities()){
-        cout << "NH saved " << startCity << endl;
+    // search each adjacentCity
+    for(auto &adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {
+            RecursiveDFS(cityGraph, adjacentCity, reachableCities, visitedCities);
     }
-
-    for(auto adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {
-            RecursiveDFS_ToFind_ReachableCities(cityGraph, adjacentCity, reachableCities, visitedCities);
-    }
-//    for(auto directCity : cityGraph.at(startCity).getDirectRoutedCities()){
-//        for(auto reachableCity : cityGraph.at(startCity).getReachableCities()) {
-//            // if it's not already a reachable city, recurse
-//            if (directCity != reachableCity) {
-//                RecursiveDFS_ToFind_ReachableCities(cityGraph,startCity,currentCity);
-//            }
-//        }
-//    }
 }
-
-
-
 
 vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(
                                     vector<string> cities, 
@@ -166,30 +161,27 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
 
     map<string, CityNode> cityGraph = createGraph(cities);
     populateDirectedRoutes(cityGraph, trainRoutes);
-    set<string> visitedCities;
-    vector<string> reachableCities;
 
-    for(auto currentCity : cities) {
-        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity, reachableCities, visitedCities);
-        for(auto endCities : cityGraph.at(currentCity).getDirectRoutedCities()){
-            cout << currentCity << " can reach " << endCities << endl;
-        }
-    }
-
-    for(auto currentCity : cities) {
-        for(auto endCities : cityGraph.at(currentCity).getDirectRoutedCities()){
-            cout << currentCity << " can reach " << endCities << endl;
-        }
-    }
-
-//    RecursiveDFS_ToFind_ReachableCities(cityGraph, "NH", reachableCities, visitedCities);
-//
-//    for (auto test: reachableCities){
-//        cout << "NH can reach " << test << endl;
+//    for(auto adjacent : cityGraph.at("SD").getDirectRoutedCities()){
+//        cout << "SD Adjacents: " << adjacent << endl;
 //    }
+//    RecursiveDFS_ToFind_ReachableCities(cityGraph, "SD");
+//
+//    for(auto adjacent : cityGraph.at("NH").getDirectRoutedCities()){
+//        cout << "NH Adjacents: " << adjacent << endl;
+//    }
+//    RecursiveDFS_ToFind_ReachableCities(cityGraph, "NH");
 
+    for(auto currentCity : cities) {
+        cout << currentCity << endl;
+        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);
 
-
+    }
+    for(auto city1 : cities) {
+        for (auto endCities: cityGraph.at(city1).getReachableCities()) {
+            cout << city1 << " can reach " << endCities << endl;
+        }
+    }
 
   // Hint for DFS:
   // You may want to use a separate function to implement the 
@@ -216,7 +208,7 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
   // by City code in ascending order, 
   // then sort by number of reachable cities in descending order.   
 
-  cout << "da error" << endl;
+  cout << "the end" << endl;
   return vector<CityNode>(); // vector<CityNode>() here is a placeholder, you need to change it to 
                              // whichever the vector your logic comes up with and return
 }
