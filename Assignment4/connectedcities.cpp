@@ -132,7 +132,7 @@ void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string star
     visitedCities.insert(startCity);
 
     // search each adjacentCity
-    for(auto &adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {
+    for(auto adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {
             RecursiveDFS(cityGraph, adjacentCity, reachableCities, visitedCities);
     }
 }
