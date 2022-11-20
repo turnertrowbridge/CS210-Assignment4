@@ -180,24 +180,23 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
 //    RecursiveDFS_ToFind_ReachableCities(cityGraph, "NH");
 
     for(auto currentCity : cities) {
-        cout << currentCity << endl;
         RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);
-
     }
     vector<pair<string , int>> cityRouteSize;
     for(auto city1 : cities) {
             cityRouteSize.emplace_back(city1, cityGraph.at(city1).getReachableCities().size());
     }
+    cout << "cityroutesize " << cityRouteSize.size() << endl;
 
     sort(cityRouteSize.begin(), cityRouteSize.end(), sortBy_SizeDesc_And_NameAsc);
 
 
 
     vector<CityNode> cityNodesSorted;
-    for(auto cities : cityGraph){
-        for(auto city2 : cityRouteSize){
-            cityNodesSorted.push_back(cityGraph.at(city2.first));
-        }
+
+    for(auto city2 : cityRouteSize){
+        cityNodesSorted.push_back(cityGraph.at(city2.first));
+        cout << " sorted " << endl;
     }
 
 
@@ -224,9 +223,7 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
   // you can leverage the std::sort()
   // one way to do the two-level of sorting here is to first sort the list 
   // by City code in ascending order, 
-  // then sort by number of reachable cities in descending order.   
-
-  cout << "the end" << endl;
+  // then sort by number of reachable cities in descending order.
   return cityNodesSorted; // vector<CityNode>() here is a placeholder, you need to change it to
                              // whichever the vector your logic comes up with and return
 }
