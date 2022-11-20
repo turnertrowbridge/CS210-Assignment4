@@ -137,6 +137,13 @@ void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string star
     }
 }
 
+bool ConnectedCities::sortBy_SizeDesc_And_NameAsc(pair<string, int>& a, pair<string,int>& b){
+    if(a.second == b.second){
+       return a.first < b.first;
+    }
+    return a.second > b.second;
+}
+
 vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(
                                     vector<string> cities, 
                                     vector<pair<string, string>> trainRoutes) {
@@ -177,11 +184,17 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
         RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);
 
     }
+    vector<pair<string , int>> cityRouteSize;
     for(auto city1 : cities) {
-        for (auto endCities: cityGraph.at(city1).getReachableCities()) {
-            cout << city1 << " can reach " << endCities << endl;
-        }
+            cityRouteSize.emplace_back(city1, cityGraph.at(city1).getReachableCities().size());
     }
+
+    sort(cityRouteSize.begin(), cityRouteSize.end(), sortBy_SizeDesc_And_NameAsc);
+
+    for(auto city2 : cityRouteSize){
+        cout << city2.first << " has " << city2.second << " routes." << endl;
+    }
+
 
   // Hint for DFS:
   // You may want to use a separate function to implement the 
@@ -209,7 +222,7 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
   // then sort by number of reachable cities in descending order.   
 
   cout << "the end" << endl;
-  return vector<CityNode>(); // vector<CityNode>() here is a placeholder, you need to change it to 
+  return vector<CityNode>(); // vector<CityNode>() here is a placeholder, you need to change it to
                              // whichever the vector your logic comes up with and return
 }
 

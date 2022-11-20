@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <algorithm>
 
 using namespace std;
 
@@ -130,7 +131,7 @@ public:
 
   static void RecursiveDFS(map<string, CityNode> &cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities);
 
-
+  static bool sortBy_SizeDesc_And_NameAsc(pair<string, int>& a, pair<string,int>& b);
 
   static vector<CityNode> citiesSortedByNumOf_Its_ReachableCities_byTrain(
                             vector<string> cities, 
