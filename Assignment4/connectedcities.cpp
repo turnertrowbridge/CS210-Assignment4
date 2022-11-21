@@ -11,7 +11,7 @@
 Date: 11/17/2022
 */
 
-map<string, CityNode> ConnectedCities::createGraph(vector<string> cities) {
+map<string, CityNode> ConnectedCities::createGraph(vector<string> cities) { // O(c)
     // create a map containing all cities added using city name as key
     // and an instance of CityNode as value
     map<string, CityNode> cityGraph;
@@ -22,7 +22,7 @@ map<string, CityNode> ConnectedCities::createGraph(vector<string> cities) {
 }
 
 void ConnectedCities::populateDirectedRoutes(map<string, CityNode> &cityGraph,
-                                             vector<pair<string, string>> trainRoutes) {
+                                             vector<pair<string, string>> trainRoutes) {  // O(c)
 
     // add the adjacent cities to each city
     for (auto city: trainRoutes){
@@ -59,7 +59,7 @@ void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string star
     }
 }
 
-bool ConnectedCities::sortBy_SizeDesc_And_NameAsc(pair<string, int>& a, pair<string,int>& b){
+bool ConnectedCities::sortBy_SizeDesc_And_NameAsc(pair<string, int>& a, pair<string,int>& b){ // O(1)
 
     // if the numbers are equal, sort by name
     if(a.second == b.second){
@@ -75,28 +75,28 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
                                     vector<pair<string, string>> trainRoutes) {
 
     // create map for graph and populate it with CityNodes
-    map<string, CityNode> cityGraph = createGraph(cities);
+    map<string, CityNode> cityGraph = createGraph(cities);      // O(c)
 
     // populate each CityNode in graph with its adjacent nodes
-    populateDirectedRoutes(cityGraph, trainRoutes);
+    populateDirectedRoutes(cityGraph, trainRoutes);         // O(c)
 
     // populate each CityNodes' reachableCities vector using RDFS
-    for(auto currentCity : cities) {
-        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);
-    }
+    for(auto currentCity : cities) {                                              // O(c)
+        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);        // O(c + r)
+    }                                                                                   // = O(c^2 + c * r)
 
     // create a vector pair storing the name of each city and it's size
     vector<pair<string , int>> cityRouteSize;
     for(auto city1 : cities) {
-            cityRouteSize.emplace_back(city1, cityGraph.at(city1).getReachableCities().size());
+            cityRouteSize.emplace_back(city1, cityGraph.at(city1).getReachableCities().size());     // O(c)
     }
 
     // sort function that sorts cityRouteSize by size in descending order, w/ name in ascending if size is equal
-    sort(cityRouteSize.begin(), cityRouteSize.end(), sortBy_SizeDesc_And_NameAsc);
+    sort(cityRouteSize.begin(), cityRouteSize.end(), sortBy_SizeDesc_And_NameAsc);          // O(c log c)
 
     // create vector that stores each CityNodes based on the sorted cityRouteSize
     vector<CityNode> cityNodesSorted;
-    for(auto city2 : cityRouteSize){
+    for(auto city2 : cityRouteSize){                                                          // O(c)
         cityNodesSorted.push_back(cityGraph.at(city2.first));
     }
 
