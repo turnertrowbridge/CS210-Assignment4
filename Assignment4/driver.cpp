@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     // A few sample testing code are provided below  
     
     /* Construct a graph for testing
-        *    SD ---> DL <--------         
+        *    SD ---> DL <--------
         *    ^                   |
         *    |                   |
         *    OD <--- JL <--------|--
@@ -130,14 +130,142 @@ int main(int argc, char **argv) {
 
     // IMPORTANT:
     // TODO: write your own testing code similar to above as part of the coding required for assignment 4
-    
+
+
+
+
     // IMPORTANT: You should construct at least one different city graph similar to the one above
     //
     // Also make sure to construct graphs for testing the edge cases, 
     // such as empty graph (NO node), one node graph, two nodes graph, etc.
 
-    cout << endl << "All test cases passed!" << endl;
 
+    /* Test case with no nodes */
+    cout << "\n\n***No nodes test***" << endl;
+
+    vector<string> cities_2 {};
+    vector<pair<string, string>> trainRoutes2;
+
+    vector<CityNode> cities2Nodes = ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(cities_2, trainRoutes2);
+
+    // No reachable cities
+    asserts(cities2Nodes.empty(), "There should be no trains");
+
+
+
+    /* Test case with 1 node */
+    cout << "\n\n***1 node test***" << endl;
+
+    vector<string> cities_3 {"SD"};
+    vector<pair<string, string>> trainRoutes3;
+
+    vector<CityNode> cities3Nodes = ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(cities_3, trainRoutes3);
+
+    asserts(cities3Nodes.at(0).getCity() == "SD", "First city should be SD");
+    //Reachable cities from SD are [SD]
+    asserts(cities3Nodes.at(0).getReachableCities().size() == 1, "Train starting from city SD can reach 1 city");
+
+    /* Test case with 2 nodes */
+
+    /*
+     *        LA -----> SD
+     *          <------
+     */
+
+    vector<string> cities_4 {"SD", "LA"};
+    vector<pair<string, string>> trainRoutes4;
+
+    trainRoutes4.emplace_back("LA", "SD");
+    trainRoutes4.emplace_back("SD", "LA");
+
+    vector<CityNode> cities4Nodes = ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(cities_4, trainRoutes4);
+
+    asserts(cities4Nodes.at(0).getCity() == "LA", "First city should be LA");
+    //Reachable cities from LA are [LA,SD]
+    asserts(cities4Nodes.at(0).getReachableCities().size() == 2, "Train starting from city LA can reach 2 cities");
+
+    asserts(cities4Nodes.at(1).getCity() == "SD", "First city should be SD");
+    //Reachable cities from SD are [SD,LA]
+    asserts(cities4Nodes.at(1).getReachableCities().size() == 2, "Train starting from city SD can reach 1 cities");
+
+
+    /* Test case with multiple nodes */
+    cout << "\n\n***Multi-node test with 2/3 letter keys***" << endl;
+
+    /*
+     *
+     *    DEN --------> CHI ----> NY---|
+     *    ^                     ^      |
+     *    |                     |      |
+     *    |                     NO <---|
+     *    |                     ^
+     *    |  <------            |
+     *    LA -----> SD -------> DAL
+     *     ^        ^           |
+     *     |        |           |
+     *     |-----|--|           |
+     *           |              |
+     *           |- SF <--- SA<-|
+
+     */
+
+    vector<string> cities_5 {"DEN","CHI","NY","NO","DAL","SA","SF","SD","LA"};
+    vector<pair<string, string>> trainRoutes5;
+
+    trainRoutes5.emplace_back("LA", "SD");
+    trainRoutes5.emplace_back("LA", "DEN");
+    trainRoutes5.emplace_back("SD", "LA");
+    trainRoutes5.emplace_back("DEN", "CHI");
+    trainRoutes5.emplace_back("CHI", "NY");
+    trainRoutes5.emplace_back("SD", "DAL");
+    trainRoutes5.emplace_back("DAL", "NO");
+    trainRoutes5.emplace_back("NO", "NY");
+    trainRoutes5.emplace_back("DAL", "SA");
+    trainRoutes5.emplace_back("SA", "SF");
+    trainRoutes5.emplace_back("SF", "SD");
+    trainRoutes5.emplace_back("SF", "LA");
+    trainRoutes5.emplace_back("NY", "NO");
+
+
+    vector<CityNode> cities5Nodes = ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(cities_5, trainRoutes5);
+
+    asserts(cities5Nodes.at(0).getCity() == "DAL", "First city should be DAL");
+    //Reachable cities from DAL are [DAL,SA,SF,SD,LA,DEN,CHI,NY,NO]
+    asserts(cities5Nodes.at(0).getReachableCities().size() == 9, "Train starting from city DAL can reach 9 cities");
+
+    asserts(cities5Nodes.at(1).getCity() == "LA", "Second city should be LA");
+    //Reachable cities from LA are [LA,SD,DAL,SA,SF,DEN,CHI,NY,NO]
+    asserts(cities5Nodes.at(1).getReachableCities().size() == 9, "Train starting from city LA can reach 9 cities");
+
+    asserts(cities5Nodes.at(2).getCity() == "SA", "Third city should be SA");
+    //Reachable cities from SA are [SA,SF,SD,LA,DEN,CHI,NY,NO,DAL]
+    asserts(cities5Nodes.at(2).getReachableCities().size() == 9, "Train starting from city SA can reach 9 cities");
+
+    asserts(cities5Nodes.at(3).getCity() == "SD", "Fourth city should be SD");
+    //Reachable cities from SA are [SD,LA,DEN,CHI,NY,NO,DAL,SA,SF]
+    asserts(cities5Nodes.at(3).getReachableCities().size() == 9, "Train starting from city SD can reach 9 cities");
+
+    asserts(cities5Nodes.at(4).getCity() == "SF", "Fifth city should be SF");
+    //Reachable cities from SF are [SF,SD,LA,DEN,CHI,NY,NO,DAL,SA]
+    asserts(cities5Nodes.at(4).getReachableCities().size() == 9, "Train starting from city SF can reach 9 cities");
+
+    asserts(cities5Nodes.at(5).getCity() == "DEN", "Sixth city should be DEN");
+    //Reachable cities from DEN are [DEN,CHI,NY,NO]
+    asserts(cities5Nodes.at(5).getReachableCities().size() == 4, "Train starting from city DEN can reach 4 cities");
+
+    asserts(cities5Nodes.at(6).getCity() == "CHI", "Seventh city should be CHI");
+    //Reachable cities from CHI are [CHI,NY,NO]
+    asserts(cities5Nodes.at(6).getReachableCities().size() == 3, "Train starting from city CHI can reach 3 cities");
+
+    asserts(cities5Nodes.at(7).getCity() == "NO", "Eighth city should be NO");
+    //Reachable cities from NO are [NO,NY]
+    asserts(cities5Nodes.at(7).getReachableCities().size() == 2, "Train starting from city NO can reach 2 cities");
+
+    asserts(cities5Nodes.at(8).getCity() == "NY", "Ninth city should be NY");
+    //Reachable cities from NY are [NY,NO]
+    asserts(cities5Nodes.at(8).getReachableCities().size() == 2, "Train starting from city NY can reach 2 cities");
+
+    cout << endl << "All test cases passed!" << endl;
     // Return EXIT_SUCCESS exit code
     exit(EXIT_SUCCESS);
 }

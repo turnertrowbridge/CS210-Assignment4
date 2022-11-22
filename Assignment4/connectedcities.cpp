@@ -82,8 +82,8 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
 
     // populate each CityNodes' reachableCities vector using RDFS
     for(auto currentCity : cities) {                                              // O(c)
-        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);        // O(c + r)
-    }                                                                                   // = O(c^2 + c * r)
+        RecursiveDFS_ToFind_ReachableCities(cityGraph, currentCity);         // * O(c + r)
+    }                                                                                    // = O(c^2 + c * r)
 
     // create a vector pair storing the name of each city and it's size
     vector<pair<string , int>> cityRouteSize;
