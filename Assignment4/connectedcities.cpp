@@ -26,7 +26,7 @@ void ConnectedCities::populateDirectedRoutes(map<string, CityNode> &cityGraph,
 
     // add the adjacent cities to each city
     for (auto city: trainRoutes){
-        if (cityGraph.count(city.first) == 1){
+        if (cityGraph.count(city.first) && cityGraph.count(city.second)){   // check if they are valid cities
             cityGraph.at(city.first).addADirectRoutedCity(city.second);
         }
     }
@@ -96,7 +96,7 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
 
     // create vector that stores each CityNodes based on the sorted cityRouteSize
     vector<CityNode> cityNodesSorted;
-    for(auto city2 : cityRouteSize){                                                          
+    for(auto city2 : cityRouteSize){
         cityNodesSorted.push_back(cityGraph.at(city2.first));
     }
 

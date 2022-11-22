@@ -232,6 +232,10 @@ int main(int argc, char **argv) {
     trainRoutes5.emplace_back("NY", "NO");
     trainRoutes5.emplace_back("LDN", "PAR");
 
+    // attempt to add cities that aren't in city vector
+    trainRoutes5.emplace_back("BUG", "LDN");
+    trainRoutes5.emplace_back("LDN", "BUG");
+    trainRoutes5.emplace_back("BUG", "BUG");
 
     vector<CityNode> cities5Nodes = ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrain(cities_5, trainRoutes5);
 
