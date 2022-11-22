@@ -11,23 +11,23 @@
 Date: 11/17/2022
 */
 
-map<string, CityNode> ConnectedCities::createGraph(vector<string> cities) { // O(c)
+map<string, CityNode> ConnectedCities::createGraph(vector<string> cities) { // O(c logc)
     // create a map containing all cities added using city name as key
     // and an instance of CityNode as value
     map<string, CityNode> cityGraph;
-    for (auto city: cities){
-        cityGraph.insert({city, CityNode(city)});
+    for (auto city: cities){                          // O(c)
+        cityGraph.insert({city, CityNode(city)});  // O(logc)
     }
     return cityGraph;
 }
 
 void ConnectedCities::populateDirectedRoutes(map<string, CityNode> &cityGraph,
-                                             vector<pair<string, string>> trainRoutes) {  // O(c)
+                                             vector<pair<string, string>> trainRoutes) {  // O(c logc)
 
     // add the adjacent cities to each city
-    for (auto city: trainRoutes){
-        if (cityGraph.count(city.first) == 1){
-            cityGraph.at(city.first).addADirectRoutedCity(city.second);
+    for (auto city: trainRoutes){                                   // O(c)
+        if (cityGraph.count(city.first) == 1){                                   // O(logc)
+            cityGraph.at(city.first).addADirectRoutedCity(city.second);     // O(logc)
         }
     }
 
@@ -42,7 +42,7 @@ void ConnectedCities::RecursiveDFS_ToFind_ReachableCities(map<string, CityNode> 
                                                                             // CityNode of startCity in graph
 }
 
-void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities){
+void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string startCity, vector<string> &reachableCities, set<string> &visitedCities){ // O(c + r)
 
     // base case: stop if city has already been visited
     if(visitedCities.count(startCity)){
@@ -54,7 +54,7 @@ void ConnectedCities::RecursiveDFS(map<string, CityNode> &cityGraph, string star
     visitedCities.insert(startCity);
 
     // search each adjacentCity
-    for(auto adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {
+    for(auto adjacentCity: cityGraph.at(startCity).getDirectRoutedCities()) {   // O(c + r)
             RecursiveDFS(cityGraph, adjacentCity, reachableCities, visitedCities);
     }
 }
@@ -75,10 +75,10 @@ vector<CityNode> ConnectedCities::citiesSortedByNumOf_Its_ReachableCities_byTrai
                                     vector<pair<string, string>> trainRoutes) {
 
     // create map for graph and populate it with CityNodes
-    map<string, CityNode> cityGraph = createGraph(cities);      // O(c)
+    map<string, CityNode> cityGraph = createGraph(cities);      // O(c logc)
 
     // populate each CityNode in graph with its adjacent nodes
-    populateDirectedRoutes(cityGraph, trainRoutes);         // O(c)
+    populateDirectedRoutes(cityGraph, trainRoutes);         // O(c logc)
 
     // populate each CityNodes' reachableCities vector using RDFS
     for(auto currentCity : cities) {                                              // O(c)
